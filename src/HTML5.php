@@ -167,7 +167,14 @@ class HTML5
     {
         $this->errors = array();
         $options = array_merge($this->getOptions(), $options);
-        $events = new DOMTreeBuilder(false, $options);
+        $events = new EventsManager();
+		$events->addListener(new DOMTreeBuilder(false, $options));
+
+		if(isset($options["listener"]))
+		{
+			$events->addListener($options["listener"]);
+		}
+
         $scanner = new Scanner($input);
         $parser = new Tokenizer($scanner, $events, !empty($options['xmlNamespaces']) ? Tokenizer::CONFORMANT_XML: Tokenizer::CONFORMANT_HTML);
 
